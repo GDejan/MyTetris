@@ -14,6 +14,18 @@ namespace MyTetris
         public int[,] BoxArray = new int[3, 3];
         public Box NextBlock { get; private set; }
 
+        /// <summary>
+        /// empty box
+        /// </summary>
+        public Box()
+        {
+
+        }
+
+        /// <summary>
+        /// rotation of a box
+        /// </summary>
+        /// <returns>Array of a block tile position</returns>
         public virtual int[,] Rotate()
         {
             int[,] result = new int[3, 3];
@@ -35,7 +47,5 @@ namespace MyTetris
 
             return BoxArray;
         }
-
-       
     }
 }

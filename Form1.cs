@@ -13,19 +13,16 @@ namespace MyTetris
 {
     public partial class Form1 : Form
     {
-        public int maxXpos = 0;
-        public int maxYpos = 0;
-        public bool Lmax = false;
-        public bool Rmax = false;
-        public bool Dmax = false;
-        public bool Umax = false;
-        int[,] TempArray = new int[16,26];
+
         int count = 0;
 
-        List <Box> BlockList = new List<Box>();
+        int[,] GridArray = new int[16, 26];
+        int[,] TempArray = new int[16, 26];
 
-        public int[,] GridArray = new int[16, 26]; //new int[Settings.windowWidth / Settings.pixelWidth, Settings.windowHeight / Settings.windowHeight, 8];
+        List<Box> BlockList = new List<Box>();
         Box Block = new Box();
+        gameState gameState=new gameState();
+        Grid Grid = new Grid();
 
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
@@ -34,27 +31,45 @@ namespace MyTetris
             InitializeComponent();
             new Settings();
 
-                timer.Interval = 1000 / Settings.blockSpeed;
-                timer.Tick += updateScreen;
-                timer.Start();
+            timer.Interval = 500 / Settings.blockSpeed;
+            timer.Tick += readInput;
+            timer.Tick += moveBlockTick;
+            timer.Start();
 
-            maxXpos = gameWindow.Size.Width / Settings.pixelWidth;
-            maxYpos = gameWindow.Size.Height / Settings.pixelHeight;
-            startGame();
+            Settings.maxXpos = gameWindow.Size.Width / Settings.pixelWidth;
+            Settings.maxYpos = gameWindow.Size.Height / Settings.pixelHeight;
+            gameState.startGame(BlockList,GridArray);
+            newBlock();
+
+            Total.Visible = true;
+            GameOwer.Visible = false;
+            
         }
 
-        private void keyisdown(object sender, KeyEventArgs e)
+        private void moveBlockTick(object sender, EventArgs e)
+        {
+            count++;
+            if (count == 2)
+            {
+                count = 0;
+                moveBlock();
+            }
+
+        }
+
+        private void keyIsDown(object sender, KeyEventArgs e)
         {
             Input.Pressed(e.KeyCode, true);
+
         }
 
-        private void keyisup(object sender, KeyEventArgs e)
+        private void keyIsUp(object sender, KeyEventArgs e)
         {
             Input.Pressed(e.KeyCode, false);
         }
 
-            
-        private void updateScreen(object sender, EventArgs e)
+
+        private void readInput(object sender, EventArgs e)
         {
             if (Input.Keyboard(Keys.Escape))
             {
@@ -69,16 +84,18 @@ namespace MyTetris
 
                 if (Input.Keyboard(Keys.Enter))
                 {
-                    startGame();
+                    gameState.startGame(BlockList, GridArray);
+                    Total.Visible = true;
+                    GameOwer.Visible = false;
                 }
             }
             else
             {
-                if (Input.Keyboard(Keys.Right) && !Rmax)
+                if (Input.Keyboard(Keys.Right) && !Settings.Rmax)
                 {
                     Block.x = Block.x + Settings.pixelWidth;
                 }
-                else if (Input.Keyboard(Keys.Left) && !Lmax)
+                else if (Input.Keyboard(Keys.Left) && !Settings.Lmax)
                 {
                     Block.x = Block.x - Settings.pixelWidth;
                 }
@@ -86,59 +103,11 @@ namespace MyTetris
                 {
                     Block.Rotate();
                 }
-                moveBlock();
 
             }
-            gameWindow.Invalidate();
-        }
-
-        private void startGame()
-        {
-            Total.Visible = true;
-            GameOwer.Visible = false;
             Total.Text = "Total " + Settings.Total.ToString();
-            Settings.gameOver = false;
-            Array.Clear(GridArray,0, GridArray.Length);
 
-            Lmax = false;
-            Rmax = false;
-            Dmax = false;
-            Umax = false;
-
-            IBlock Block1 = new IBlock();
-                 Block1.ArrayBox();
-                 Block1.Id();
-                 BlockList.Add(Block1);
-             JBlock Block2 = new JBlock();
-                 Block2.ArrayBox();
-                 Block2.Id();
-                 BlockList.Add(Block2);
-             LBlock Block3 = new LBlock();
-                 Block3.ArrayBox();
-                 Block3.Id();
-                 BlockList.Add(Block3);
-             TBlock Block4 = new TBlock();
-                 Block4.ArrayBox();
-                 Block4.Id();
-                 BlockList.Add(Block4);
-             OBlock Block5 = new OBlock();
-                 Block5.ArrayBox();
-                 Block5.Id();
-                 BlockList.Add(Block5);
-             SBlock Block6 = new SBlock();
-                 Block6.ArrayBox();
-                 Block6.Id();
-                 BlockList.Add(Block6);
-             ZBlock Block7 = new ZBlock();
-                 Block7.ArrayBox();
-                 Block7.Id();
-                 BlockList.Add(Block7);
-             XBlock Block8 = new XBlock();
-                 Block8.ArrayBox();
-                 Block8.Id();
-                 BlockList.Add(Block8);
-            newBlock();
-
+            gameWindow.Invalidate();
         }
 
         private void newBlock()
@@ -146,15 +115,15 @@ namespace MyTetris
             Random random = new Random();
             switch (Settings.Total)
             {
-                case var expression when (Settings.Total >= 0 && Settings.Total <= 10):
+                case int expression when (Settings.Total >= 0 && Settings.Total <= 10):
                     Block = BlockList[random.Next(0, 5)];
                     break;
 
-                case var expression when (Settings.Total > 10 && Settings.Total <= 20):
+                case int expression when (Settings.Total > 10 && Settings.Total <= 20):
                     Block = BlockList[random.Next(0, 8)];
                     break;
 
-                case var expression when (Settings.Total > 20):
+                case int expression when (Settings.Total > 20):
                     Block = BlockList[random.Next(5, 8)];
                     break;
 
@@ -168,14 +137,15 @@ namespace MyTetris
             Block.Rotate(); //back to initial position
 
         }
+
         private void moveBlock()
         {
-            Lmax = false;
-            Rmax = false;
-            Dmax = false;
-            Umax = false;
+            Settings.Lmax = false;
+            Settings.Rmax = false;
+            Settings.Dmax = false;
+            Settings.Umax = false;
 
-            Array.Clear(TempArray,0,TempArray.Length);
+            Array.Clear(TempArray, 0, TempArray.Length);
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -193,45 +163,45 @@ namespace MyTetris
             }
 
 
-            for (int i = 0; i < maxXpos; i++) //16
+            for (int i = 0; i < Settings.maxXpos; i++) //16
             {
-                for (int j = 0; j < maxYpos; j++) //26
+                for (int j = 0; j < Settings.maxYpos; j++) //26
                 {
 
-                    if ((TempArray[0,j] > 0) || ((TempArray[i, j] > 0) && GridArray[i-1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i - 1, j+1] > 0) )
+                    if ((TempArray[0, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i - 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i - 1, j + 1] > 0))
                     {
-                        Lmax = true;
-                    }
-                    
-                    if ((TempArray[maxXpos-1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i+1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i + 1, j+1] > 0)) //13
-                    {
-                        Rmax = true;
+                        Settings.Lmax = true;
                     }
 
-                    if ((TempArray[i, maxYpos - 1] > 0) || ((TempArray[i, j] > 0) && GridArray[i, j + 1] > 0)) //22
+                    if ((TempArray[Settings.maxXpos - 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i + 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i + 1, j + 1] > 0)) //13
                     {
-                        Dmax = true;
-                        if (Block.y <=0) 
+                        Settings.Rmax = true;
+                    }
+
+                    if ((TempArray[i, Settings.maxYpos - 1] > 0) || ((TempArray[i, j] > 0) && GridArray[i, j + 1] > 0)) //22
+                    {
+                        Settings.Dmax = true;
+                        if (Block.y <= 0)
                         {
-                            Collision();
+                            gameState.Collision();
                         }
                     }
                 }
             }
 
-            if (!Dmax) // till blocked
+            if (!Settings.Dmax) // till blocked
             {
                 Block.y = Block.y + Settings.pixelHeight;
             }
             else
             {
                 Memorize();
-                ClearRow();
+                Grid.ClearRow(GridArray);
                 newBlock();
             }
         }
 
-        private void Memorize() 
+        public void Memorize()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -239,55 +209,11 @@ namespace MyTetris
                 {
                     if (Block.BoxArray[i, j] > 0)
                     {
-                        GridArray[(Block.x+(Settings.pixelWidth * j)) / Settings.pixelWidth, (Block.y+ (Settings.pixelWidth * i)) / Settings.pixelHeight] = Block.id;
+                        GridArray[(Block.x + (Settings.pixelWidth * j)) / Settings.pixelWidth, (Block.y + (Settings.pixelWidth * i)) / Settings.pixelHeight] = Block.id;
                     }
                 }
             }
 
-        }
-        private void ClearRow()
-        {
-            for (int j = maxYpos-1; j >= 0; j--) //16
-            {
-                List<bool> rowClear = new List<bool>();
-                rowClear.Clear();
-                for (int i = 0; i < maxXpos; i++) //26
-                {
-                    if (GridArray[i,j]!=0) 
-                    {
-                        rowClear.Add(true);
-                    }
-                    else 
-                    {
-                        rowClear.Add(false);
-                    }
-                }
-                if (rowClear.All(x => x==true)) 
-                {
-                    MoveRow(j);
-                    j = maxYpos;
-                }
-
-            }
-        }
-
-        private void MoveRow(int row)
-        {
-            for (int j = row; j >= 1; j--) //16
-            {
-                for (int i = 0; i < maxXpos; i++) //26
-                {
-                    GridArray[i, j] = GridArray[i, j - 1];
-                }
-            }
-            Settings.Total++;
-            Total.Text = "Total: " + Settings.Total.ToString();
-
-        }
-
-        private void Collision()
-        {
-           Settings.gameOver = true;
         }
 
 
@@ -343,11 +269,11 @@ namespace MyTetris
                         }
                     }
                 }
-                
+
                 // pinting game grid
-                for (int i = 0; i < maxXpos; i++) //15
+                for (int i = 0; i < Settings.maxXpos; i++) //15
                 {
-                    for (int j = 0; j < maxYpos; j++) //25
+                    for (int j = 0; j < Settings.maxYpos; j++) //25
                     {
                         if (GridArray[i, j] > 0)
                         {
@@ -393,7 +319,6 @@ namespace MyTetris
                 }
             }
         }
-
     }
 }
     

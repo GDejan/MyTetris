@@ -8,18 +8,26 @@ using System.Windows.Forms;
 
 namespace MyTetris
 {
- 
-    class Settings
+    /// <summary>
+    /// helper class with game settings
+    /// </summary>
+    internal class Settings
     {
-        public static int pixelWidth { get; set; }
-        public static int pixelHeight { get; set; }
-        public static int blockSpeed { get; set; }
-        public static int Total { get; set; }
+        public static int pixelWidth { get; private set; }
+        public static int pixelHeight { get; private set; }
+        public static int blockSpeed { get; private set; }
+        public static int Total { get;  set; }
         public static bool gameOver { get; set; }
-        public static int StartX { get; set; }
-        public static int StartY { get; set; }
-        public static int windowWidth { get; set; }
-        public static int windowHeight { get; set; }
+        public static int StartX { get; private set; }
+        public static int StartY { get; private set; }
+        public static int windowWidth { get; private set; }
+        public static int windowHeight { get; private set; }
+        public static int maxXpos  { get; set; }
+        public static int maxYpos { get; set; }
+        public static bool Lmax { get; set; }
+        public static bool Rmax { get; set; }
+        public static bool Dmax { get; set; }
+        public static bool Umax { get; set; }
 
         public Settings()
         {
@@ -32,22 +40,12 @@ namespace MyTetris
             gameOver = false;
             windowWidth = 325;
             windowHeight = 580;
-        }
+            maxXpos = 0;
+            maxYpos = 0;
+            Lmax = false;
+            Rmax = false;
+            Dmax = false;
+            Umax = false;
     }
-    class Input
-    {
-        private static Hashtable keyTable = new Hashtable();
-        public static bool Keyboard(Keys key)
-        {
-            if (keyTable[key] == null)
-            {
-                return false;
-            }
-            return (bool)keyTable[key];
-        }
-        public static void Pressed(Keys key, bool state)
-        {
-            keyTable[key] = state;
-        }
     }
 }

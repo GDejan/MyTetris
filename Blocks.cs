@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace MyTetris
 {
+    /// <summary>
+    /// I block
+    /// </summary>
     public class IBlock : Box
     {
         public int[,] ArrayBox() 
@@ -25,6 +28,9 @@ namespace MyTetris
             { return id=1; }
     }
 
+    /// <summary>
+    /// J block
+    /// </summary>
     public class JBlock : Box
     {
         public int[,] ArrayBox()
@@ -43,6 +49,10 @@ namespace MyTetris
         public int Id()
         { return id = 2; }
     }
+
+    /// <summary>
+    /// L block
+    /// </summary>
     public class LBlock : Box
     {
         public int[,] ArrayBox()
@@ -61,6 +71,10 @@ namespace MyTetris
         public int Id()
         { return id = 3; }
     }
+
+    /// <summary>
+    /// T block
+    /// </summary>
     public class TBlock : Box
     {
         public int[,] ArrayBox()
@@ -79,6 +93,10 @@ namespace MyTetris
         public int Id()
         { return id = 4; }
     }
+
+    /// <summary>
+    /// O block
+    /// </summary>
     public class OBlock : Box
     {
         public int[,] ArrayBox()
@@ -102,6 +120,10 @@ namespace MyTetris
             return BoxArray;
         }
     }
+
+    /// <summary>
+    /// S block
+    /// </summary>
     public class SBlock : Box
     {
         public int[,] ArrayBox()
@@ -120,6 +142,10 @@ namespace MyTetris
         public int Id()
         { return id = 6; }
     }
+
+    /// <summary>
+    /// Z block
+    /// </summary>
     public class ZBlock : Box
     {
         public int[,] ArrayBox()
@@ -138,6 +164,10 @@ namespace MyTetris
         public int Id()
         { return id = 7; }
     }
+
+    /// <summary>
+    /// X block
+    /// </summary>
     public class XBlock : Box
     {
         public int[,] ArrayBox()

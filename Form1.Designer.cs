@@ -80,8 +80,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form1";
             this.Text = "Form1";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyisdown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.keyisup);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyIsDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.keyIsUp);
             ((System.ComponentModel.ISupportInitialize)(this.gameWindow)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
