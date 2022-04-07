@@ -15,14 +15,6 @@ namespace MyTetris
         public Box NextBlock { get; private set; }
 
         /// <summary>
-        /// empty box
-        /// </summary>
-        public Box()
-        {
-
-        }
-
-        /// <summary>
         /// rotation of a box
         /// </summary>
         /// <returns>Array of a block tile position</returns>

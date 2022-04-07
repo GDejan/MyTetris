@@ -15,24 +15,23 @@ namespace MyTetris
 
         private void MoveRow(int[,] GridArray, int row)
         {
-            for (int j = row; j >= 1; j--) //16
+            for (int j = row; j >= 1; j--)
             {
-                for (int i = 0; i < Settings.maxXpos; i++) //26
+                for (int i = 0; i < Settings.maxXpos; i++)
                 {
                     GridArray[i, j] = GridArray[i, j - 1];
                 }
             }
             Settings.Total++;
-
         }
 
         public void ClearRow(int[,] GridArray)
         {
-            for (int j = Settings.maxYpos - 1; j >= 0; j--) //16
+            for (int j = Settings.maxYpos - 1; j >= 0; j--) 
             {
                 List<bool> rowClear = new List<bool>();
                 rowClear.Clear();
-                for (int i = 0; i < Settings.maxXpos; i++) //26
+                for (int i = 0; i < Settings.maxXpos; i++) 
                 {
                     if (GridArray[i, j] != 0)
                     {
@@ -48,11 +47,7 @@ namespace MyTetris
                     MoveRow(GridArray, j);
                     j = Settings.maxYpos;
                 }
-
             }
         }
-
-       
-
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Timers;
+using MyTetris.Blocks;
 
 namespace MyTetris
 {
@@ -77,6 +78,7 @@ namespace MyTetris
             }
             if (Settings.gameOver == true)
             {
+
                 string gameOver = "Game Over\n" + "Total is: " + Settings.Total + "\nEnter to Restart";
                 GameOwer.Text = gameOver;
                 GameOwer.Visible = true;
@@ -95,11 +97,12 @@ namespace MyTetris
                 {
                     Block.x = Block.x + Settings.pixelWidth;
                 }
-                else if (Input.Keyboard(Keys.Left) && !Settings.Lmax)
+                if (Input.Keyboard(Keys.Left) && !Settings.Lmax)
                 {
                     Block.x = Block.x - Settings.pixelWidth;
                 }
-                else if (Input.Keyboard(Keys.Up))
+
+                if (Input.Keyboard(Keys.Up))
                 {
                     Block.Rotate();
                 }
@@ -145,6 +148,7 @@ namespace MyTetris
             Settings.Dmax = false;
             Settings.Umax = false;
 
+
             Array.Clear(TempArray, 0, TempArray.Length);
             for (int i = 0; i < 3; i++)
             {
@@ -163,9 +167,9 @@ namespace MyTetris
             }
 
 
-            for (int i = 0; i < Settings.maxXpos; i++) //16
+            for (int i = 0; i < Settings.maxXpos; i++) 
             {
-                for (int j = 0; j < Settings.maxYpos; j++) //26
+                for (int j = 0; j < Settings.maxYpos; j++) 
                 {
 
                     if ((TempArray[0, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i - 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i - 1, j + 1] > 0))
@@ -173,7 +177,7 @@ namespace MyTetris
                         Settings.Lmax = true;
                     }
 
-                    if ((TempArray[Settings.maxXpos - 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i + 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i + 1, j + 1] > 0)) //13
+                    if ((TempArray[Settings.maxXpos - 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i + 1, j] > 0) || ((TempArray[i, j] > 0) && GridArray[i + 1, j + 1] > 0)) 
                     {
                         Settings.Rmax = true;
                     }

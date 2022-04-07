@@ -33,5 +33,7 @@ namespace MyTetris
         {
             keyTable[key] = state;
         }
+
+
     }  
 }
